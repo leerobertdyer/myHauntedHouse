@@ -16,4 +16,31 @@ body
     top: 0;
     left: 0;
     outline: none;
+    display: none;
 }
+
+
+.popup {
+    width: 100vw;
+    height: 100vh;
+    color: white;
+    background-color: rgba(24, 24, 24, .8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../static/ghostPic.jpeg');
+    background-size: cover;
+}
+
+.headerText {
+    background-color: rgb(24, 24, 24);
+    padding: 20px;
+    border-radius: 12px;
+}
+
+
+.hidden {
+    display: none;
+}
+

@@ -2,8 +2,6 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import GUI from 'lil-gui'
 
-
-
 /**
  * Base
  */
@@ -14,6 +12,24 @@ gui.hide()
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
+const click = document.querySelector('.popup')
+click.addEventListener('click', () => {
+    click.classList.add('hidden')
+    canvas.style.display = "block"
+
+    const listener = new THREE.AudioListener();
+    camera.add(listener)
+
+    const sound = new THREE.Audio(listener)
+
+    const audioLoader = new THREE.AudioLoader()
+    audioLoader.load('sounds/halloweenMusic.mp3', (buffer) => {
+        sound.setBuffer(buffer)
+        sound.setLoop(true)
+        sound.setVolume(.5)
+        sound.play()
+    })
+})
 
 // Scene
 const scene = new THREE.Scene()
@@ -53,10 +69,10 @@ const grassAmbientTexture = textureLoader.load('./textures/grass/ambientOcclusio
 const grassNormalTexture = textureLoader.load('./textures/grass/normal.jpg')
 const grassRoughnessTexture = textureLoader.load('./textures/grass/roughness.jpg')
 
-grassColorTexture.repeat.set(8,8)
-grassAmbientTexture.repeat.set(8,8)
-grassNormalTexture.repeat.set(8,8)
-grassRoughnessTexture.repeat.set(8,8)
+grassColorTexture.repeat.set(8, 8)
+grassAmbientTexture.repeat.set(8, 8)
+grassNormalTexture.repeat.set(8, 8)
+grassRoughnessTexture.repeat.set(8, 8)
 
 grassColorTexture.wrapS = THREE.RepeatWrapping
 grassColorTexture.wrapT = THREE.RepeatWrapping
@@ -77,7 +93,7 @@ grassRoughnessTexture.wrapT = THREE.RepeatWrapping
 // Floor
 const floor = new THREE.Mesh(
     new THREE.PlaneGeometry(20, 20),
-    new THREE.MeshStandardMaterial({ 
+    new THREE.MeshStandardMaterial({
         map: grassColorTexture,
         aoMap: grassAmbientTexture,
         normalMap: grassNormalTexture,
@@ -97,12 +113,12 @@ scene.add(house)
 const h = 3
 const walls = new THREE.Mesh(
     new THREE.BoxGeometry(4, h, 4),
-    new THREE.MeshStandardMaterial({ 
+    new THREE.MeshStandardMaterial({
         map: bricksColorTexture,
         aoMap: bricksAmbientTexture,
         normalMap: bricksNormalTexture,
         // roughness: bricksRoughnessTexture
-     })
+    })
 )
 walls.position.set(0, h * .5, 0)
 house.add(walls)
@@ -110,7 +126,7 @@ house.add(walls)
 //roof
 const roof = new THREE.Mesh(
     new THREE.ConeGeometry(3, 2, 4),
-    new THREE.MeshStandardMaterial( {color: 'darkred'})
+    new THREE.MeshStandardMaterial({ color: 'darkred' })
 )
 roof.position.y = h + 1
 roof.rotation.y = Math.PI * .25
@@ -119,7 +135,7 @@ house.add(roof)
 //DOOR 
 const door = new THREE.Mesh(
     new THREE.PlaneGeometry(1.8, 2, 100, 100),
-    new THREE.MeshStandardMaterial( { 
+    new THREE.MeshStandardMaterial({
         map: doorColorTexture,
         transparent: true,
         alphaMap: doorAlphaTexture,
@@ -135,7 +151,7 @@ const door = new THREE.Mesh(
 
 const doorFrame = new THREE.Mesh(
     new THREE.PlaneGeometry(1.3, 2.2),
-    new THREE.MeshStandardMaterial( { color: 'black' })
+    new THREE.MeshStandardMaterial({ color: 'black' })
 )
 
 doorFrame.position.set(0, 1, 2.001)
@@ -144,7 +160,7 @@ house.add(door, doorFrame)
 
 // BUSHES
 const bushGeo = new THREE.SphereGeometry(.6, 16, 16)
-const bushMat = new THREE.MeshStandardMaterial({ map: bushTexture})
+const bushMat = new THREE.MeshStandardMaterial({ map: bushTexture })
 
 const bushR1 = new THREE.Mesh(bushGeo, bushMat)
 const bushR2 = new THREE.Mesh(bushGeo, bushMat)
@@ -175,7 +191,7 @@ const graves = new THREE.Group()
 scene.add(graves)
 
 const graveGeo = new THREE.BoxGeometry(.6, .8, .2)
-const graveMat = new THREE.MeshStandardMaterial( { color: 'gray' })
+const graveMat = new THREE.MeshStandardMaterial({ color: 'gray' })
 
 for (let i = 0; i < 50; i++) {
     const angle = Math.random() * Math.PI * 2
@@ -185,8 +201,8 @@ for (let i = 0; i < 50; i++) {
     const grave = new THREE.Mesh(graveGeo, graveMat)
     grave.position.set(x, .2, z)
 
-    grave.rotation.y = Math.random() -.5
-    grave.rotation.z = Math.random() -.5
+    grave.rotation.y = Math.random() - .5
+    grave.rotation.z = Math.random() - .5
     graves.add(grave)
 
 }
@@ -200,7 +216,7 @@ scene.add(ghost1, ghost2, ghost3)
 
 //GHOST BODIES
 const ghostBodyGeo = new THREE.SphereGeometry(.5, 10, 10, 1, 12, 13, 14)
-const ghostBodyMat = new THREE.MeshStandardMaterial( { color: 'white' })
+const ghostBodyMat = new THREE.MeshStandardMaterial({ color: 'white' })
 
 const ghostBody1 = new THREE.Mesh(ghostBodyGeo, ghostBodyMat)
 ghost1.add(ghostBody1)
@@ -213,7 +229,7 @@ ghost3.add(ghostBody3)
 
 //GHOST EYES
 const ghostEyeGeo = new THREE.CylinderGeometry(.25, .05, .72)
-const ghostEyeMat = new THREE.MeshStandardMaterial( { color: "gold" })
+const ghostEyeMat = new THREE.MeshStandardMaterial({ color: "gold" })
 
 const ghost1LEye = new THREE.Mesh(ghostEyeGeo, ghostEyeMat)
 const ghost1REye = new THREE.Mesh(ghostEyeGeo, ghostEyeMat)
@@ -295,8 +311,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -320,20 +335,9 @@ camera.position.y = 2
 camera.position.z = 7
 scene.add(camera)
 
-//AUDIO
 
-const listener = new THREE.AudioListener();
-camera.add( listener )
 
-const sound = new THREE.Audio( listener )
 
-const audioLoader = new THREE.AudioLoader()
-audioLoader.load('sounds/halloweenMusic.mp3', (buffer) => {
-    sound.setBuffer(buffer)
-    sound.setLoop(true)
-    sound.setVolume(.5)
-    sound.play()
-})
 
 
 // Controls
@@ -356,8 +360,7 @@ renderer.shadowMap.enabled = true
  */
 const clock = new THREE.Clock()
 
-const tick = () =>
-{
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
     const ghost1Angle = elapsedTime * .2
@@ -371,8 +374,8 @@ const tick = () =>
     ghost2.position.x = Math.cos(ghost2Angle) * 5
     ghost2.position.z = Math.sin(ghost2Angle) + Math.sin(ghost2Angle) * 5
     ghost2.position.y = Math.sin(ghost2Angle * 4) + Math.sin(elapsedTime * 2.5)
-    
-   
+
+
     const ghost3Angle = elapsedTime * -1.1
     ghost3.position.x = Math.cos(ghost3Angle) * 5
     ghost3.position.z = Math.sin(ghost3Angle) * 5
